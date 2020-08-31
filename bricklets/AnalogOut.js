@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 IBM Corp.
+ * Copyright 2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,14 +44,16 @@ module.exports = function(RED) {
         node.on('input', function(msg){
             if(node.ao) {
                 if (typeof msg.payload === 'number') {
-                    if (msg.payload >=0 && msg.parts <= 12) {
+                    if (msg.payload >=0 && msg.payload <= 12) {
                         var v = Math.round(msg.payload * 1000);
                         node.ao.setOutputVoltage(v);
                     }
+                } else {
+                    node.error("Payload not a number");
                 }
             }
         });
-        
+
 
         node.on('close',function() {
             node.ipcon.disconnect();

@@ -1,14 +1,14 @@
 <!--
-  Copyright 2016 IBM Corp.
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+-  Copyright 2017 IBM Corp.
+-  Licensed under the Apache License, Version 2.0 (the "License");
+-  you may not use this file except in compliance with the License.
+-  You may obtain a copy of the License at
+-  http://www.apache.org/licenses/LICENSE-2.0
+-  Unless required by applicable law or agreed to in writing, software
+-  distributed under the License is distributed on an "AS IS" BASIS,
+-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-  See the License for the specific language governing permissions and
+-  limitations under the License.
 -->
 
 <script type="text/x-red" data-template-name="TinkerForge AmbientLight">
@@ -48,7 +48,6 @@
 			device: {type: "TinkerForgeConfig", required: true},
 			sensor: {required: true},
 			pollTime: {value: "10", required: true},
-			//sensor: {type: "TinkerForgeSensor", requried: true},
 			name: {},
 			topic: {}
 		},
@@ -57,6 +56,7 @@
 		label: function() {
 			return this.name || "TinkerForge AmbientLight";
 		},
+		paletteLabel: 'Ambient Light',
 		color: 'gray',
 		icon: 'tf.png',
 		oneditprepare: function() {
@@ -64,8 +64,20 @@
 
 			if (node.device) {
 				var key = $('#node-input-device').val();
+				$('#node-input-sensor').find('option').remove().end();
 				$.getJSON('TinkerForge/' + key +"/sensors/" + 259, function(data){
-					$('#node-input-sensor').find('option').remove().end();
+					for (d in data) {
+						$('<option/>',{
+							value: data[d].uid,
+							text: data[d].uid + " - " + data[d].position
+						}).appendTo('#node-input-sensor');
+					}
+					if (node.sensor) {
+						$('#node-input-sensor').val(node.sensor);
+					}
+				});
+				$.getJSON('TinkerForge/' + key +"/sensors/" + 21, function(data){
+
 					for (d in data) {
 						$('<option/>',{
 							value: data[d].uid,
@@ -77,15 +89,27 @@
 					}
 				});
 			} else {
-				console.log("no device");
+				console.log("no device1");
 			}
 
 			$('#node-input-device').change(function(){
 				var dev = $('#node-input-device').val();
 				if (dev) {
 					var key = dev;
+					$('#node-input-sensor').find('option').remove().end();
 					$.getJSON('TinkerForge/' + key +"/sensors/" + 259, function(data){
-						$('#node-input-sensor').find('option').remove().end();
+						for (d in data) {
+							console.log(d)
+							$('<option/>',{
+								value: data[d].uid,
+								text: data[d].uid + " - " + data[d].position
+							}).appendTo('#node-input-sensor');
+						}
+						if (node.sensor) {
+							$('#node-input-sensor').val(node.sensor);
+						}
+					});
+					$.getJSON('TinkerForge/' + key +"/sensors/" + 21, function(data){
 						for (d in data) {
 							$('<option/>',{
 								value: data[d].uid,
@@ -97,7 +121,7 @@
 						}
 					});
 				} else {
-					console.log("no device");
+					console.log("no device2");
 				}
 			});
 

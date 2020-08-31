@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 IBM Corp.
+ * Copyright 2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,9 @@ module.exports = function(RED) {
         node.ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         function(connectReason) {
             node.al = new Tinkerforge.BrickletAmbientLightV2(node.sensor, node.ipcon);
+            if (!node.al) {
+              node.al = new Tinkerforge.BrickletAmbientLight(node.sensor, node.ipcon);
+            }
             node.interval = setInterval(function(){
                 if (node.al) {
                     node.al.getIlluminance(function(lux) {
@@ -56,6 +59,23 @@ module.exports = function(RED) {
                     });
                 }
             },(node.pollTime * 1000));
+            // if (!node.al) {
+            //   node.al = new Tinkerforge.BrickletAmbientLight(node.sensor, node.ipcon);
+            //   node.interval = setInterval(function(){
+            //       if (node.al) {
+            //           node.al.getIlluminance(function(lux) {
+            //               node.send({
+            //                   topic: node.topic || 'light',
+            //                   payload: lux/100.0
+            //               })
+            //           },
+            //           function(err) {
+            //               //error
+            //               node.error(err);
+            //           });
+            //       }
+            //   },(node.pollTime * 1000));
+            // }
         });
 
         node.on('close',function() {

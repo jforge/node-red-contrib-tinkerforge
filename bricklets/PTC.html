@@ -1,15 +1,16 @@
 <!--
-  Copyright 2016 IBM Corp.
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+-  Copyright 2017 IBM Corp.
+-  Licensed under the Apache License, Version 2.0 (the "License");
+-  you may not use this file except in compliance with the License.
+-  You may obtain a copy of the License at
+-  http://www.apache.org/licenses/LICENSE-2.0
+-  Unless required by applicable law or agreed to in writing, software
+-  distributed under the License is distributed on an "AS IS" BASIS,
+-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-  See the License for the specific language governing permissions and
+-  limitations under the License.
 -->
+
 
 <script type="text/x-red" data-template-name="TinkerForge PTC">
 	<div class="form-row">
@@ -38,7 +39,7 @@
 	<p>A input node to poll the value from a Tinkerforge PTC bricklet</p>
 	<p>Configuration options are:</p>
 	<ul>
-		<li>Poll inteval - time between reteriving a new value</li>
+		<li>Poll inteval - time in seconds between reteriving a new value</li>
 	</ul>
 	<p>Output:</p>
 	<ul>
@@ -53,7 +54,6 @@
 			device: {type: "TinkerForgeConfig", required: true},
 			sensor: {required: true},
 			pollTime: {value: "10", required: true},
-			//sensor: {type: "TinkerForgeSensor", requried: true},
 			name: {},
 			topic: {}
 		},
@@ -62,6 +62,7 @@
 		label: function() {
 			return this.name || "TinkerForge PTC";
 		},
+		paletteLabel: 'PTC',
 		color: 'gray',
 		icon: 'tf.png',
 		oneditprepare: function() {
